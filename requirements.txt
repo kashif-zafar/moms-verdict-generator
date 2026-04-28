@@ -1,0 +1,18 @@
+# Moms Verdict Generator — dependencies
+# Install with: pip install -r requirements.txt
+
+# Core RAG stack
+faiss-cpu>=1.7.4          # vector store (local, no API needed)
+sentence-transformers>=2.6 # only needed if switching from Ollama to local embedding
+
+# Structured output + validation
+pydantic>=2.0
+
+# HTTP (Ollama + OpenRouter calls)
+requests>=2.31
+
+# Numerics
+numpy>=1.26
+
+# Optional: for a quick eval script
+scikit-learn>=1.4         # cosine_similarity, metrics

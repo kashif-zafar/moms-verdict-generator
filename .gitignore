@@ -1,0 +1,34 @@
+# generated output
+outputs/
+
+# local secrets
+.env
+
+# Python virtualenv
+.venv/
+venv/
+env/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Test / lint caches
+.pytest_cache/
+.mypy_cache/
+.pyre/
+
+# Packaging
+build/
+dist/
+*.egg-info/
+pip-wheel-metadata/
+
+# IDE/editor
+.vscode/
+.idea/
+
+# Logs and runtime files
+*.log
+*.sqlite3
