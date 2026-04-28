@@ -5,6 +5,8 @@
 Evals were written **before** calling the system done — not after.
 The goal was to catch real failure modes, not confirm the happy path.
 
+**Note on test data**: The 20 sample reviews in `data/reviews.json` are synthetic and were generated using LLMs for testing purposes. They are designed to cover realistic e-commerce patterns (positive/negative feedback, multilingual content, specific complaints, use cases) but do not represent real customer reviews.sta
+
 Two layers of evaluation:
 1. **Automated eval suite** (`eval.py`) — 5 objective checks run against every output
 2. **Manual test cases** — 10+ inputs covering easy, adversarial, and edge cases

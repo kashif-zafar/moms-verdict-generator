@@ -1,4 +1,5 @@
 # Moms Verdict Generator
+
 ### Track A — AI Engineering Intern | Mumzworld Take-Home
 
 > Takes 100–200 messy product reviews (English + Arabic) and converts them into
@@ -23,22 +24,26 @@ includes an objective eval suite that caught a real calibration bug during devel
 ## Setup — clone to first output in under 5 minutes
 
 ### Prerequisites
+
 - Python 3.10+
 - [Ollama](https://ollama.ai) installed and running
 - [OpenRouter](https://openrouter.ai) free API key
 
 ### 1. Install dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
 ### 2. Start Ollama and pull BGE-M3
+
 ```bash
 ollama serve          # keep this terminal open
 ollama pull bge-m3    # ~1.2GB, one-time download
 ```
 
 ### 3. Set your OpenRouter API key
+
 ```bash
 # Linux / Mac
 export OPENROUTER_API_KEY="sk-or-your-key-here"
@@ -51,11 +56,13 @@ set OPENROUTER_API_KEY=sk-or-your-key-here
 ```
 
 ### 4. Run the pipeline
+
 ```bash
 python main.py --product "Chicco KeyFit 30 Infant Car Seat" --reviews data/reviews.json
 ```
 
 ### 5. Run evals
+
 ```bash
 python eval.py --verdict outputs/verdict_chicco_*.json --reviews data/reviews.json
 ```
@@ -93,14 +100,14 @@ Reviews (JSON — EN + AR)
 
 ## Stack
 
-| Component     | Choice                  | Why                                               |
-|---------------|-------------------------|---------------------------------------------------|
-| Embeddings    | BGE-M3 via Ollama       | Multilingual (EN + AR), local, free, no API key   |
-| Vector store  | FAISS (local)           | Zero config, < 1ms retrieval for 100–200 reviews  |
-| LLM           | OpenRouter              | Free tier, multi-model, explicit in brief         |
-| Model         | Qwen 2.5 72B            | Best multilingual performance on free tier        |
-| Fallback      | LLaMA 3 8B              | Auto-retry if Qwen hits quota                     |
-| Validation    | Pydantic v2             | Schema + cross-field constraints, explicit errors |
+| Component    | Choice            | Why                                               |
+| ------------ | ----------------- | ------------------------------------------------- |
+| Embeddings   | BGE-M3 via Ollama | Multilingual (EN + AR), local, free, no API key   |
+| Vector store | FAISS (local)     | Zero config, < 1ms retrieval for 100–200 reviews  |
+| LLM          | OpenRouter        | Free tier, multi-model, explicit in brief         |
+| Model        | Qwen 2.5 72B      | Best multilingual performance on free tier        |
+| Fallback     | LLaMA 3 8B        | Auto-retry if Qwen hits quota                     |
+| Validation   | Pydantic v2       | Schema + cross-field constraints, explicit errors |
 
 ---
 
@@ -109,11 +116,11 @@ Reviews (JSON — EN + AR)
 Confidence is computed from three independent signals **before** the LLM is called.
 The LLM's self-reported confidence is discarded and replaced with this computed score.
 
-| Signal | Weight | Description |
-|---|---|---|
-| `retrieval_coverage` | 40% | Fraction of top-k chunks above similarity threshold |
-| `sentiment_consistency` | 40% | Low rating variance = reviewers agree |
-| `review_volume_score` | 20% | Normalised review count, soft cap at 100 |
+| Signal                  | Weight | Description                                         |
+| ----------------------- | ------ | --------------------------------------------------- |
+| `retrieval_coverage`    | 40%    | Fraction of top-k chunks above similarity threshold |
+| `sentiment_consistency` | 40%    | Low rating variance = reviewers agree               |
+| `review_volume_score`   | 20%    | Normalised review count, soft cap at 100            |
 
 A Pydantic `@field_validator` cross-checks the top-level `confidence_score`
 against the breakdown weights and raises an explicit error if they diverge by > 0.05.
@@ -147,7 +154,7 @@ moms_verdict/
 ├── EVALS.md              ← eval rubric, 10 test cases, results, known failures
 ├── TRADEOFFS.md          ← architecture decisions, what was cut, what's next
 ├── data/
-│   └── reviews.json      ← 20 sample reviews (15 EN + 5 AR)
+│   └── reviews.json      ← 20 synthetic reviews (15 EN + 5 AR) — LLM-generated
 ├── src/
 │   ├── schema.py         ← Pydantic models + cross-field validator
 │   ├── loader.py         ← load, clean, deduplicate, chunk
@@ -165,12 +172,12 @@ moms_verdict/
 
 ## Tooling
 
-| Tool | Role |
-|---|---|
-| **ChatGPT (GPT-4o)** | Architecture planning — back-and-forth to pressure-test stack choices before writing any code |
-| **Claude (Sonnet)** | Primary coding assistant — all module code, eval suite, and documentation |
-| **Qwen 2.5 72B via OpenRouter** | Runtime LLM — generates structured verdict JSON |
-| **BGE-M3 via Ollama** | Runtime embeddings — local, multilingual, no API key |
+| Tool                            | Role                                                                                          |
+| ------------------------------- | --------------------------------------------------------------------------------------------- |
+| **ChatGPT (GPT-4o)**            | Architecture planning — back-and-forth to pressure-test stack choices before writing any code |
+| **Claude (Sonnet)**             | Primary coding assistant — all module code, eval suite, and documentation                     |
+| **Qwen 2.5 72B via OpenRouter** | Runtime LLM — generates structured verdict JSON                                               |
+| **BGE-M3 via Ollama**           | Runtime embeddings — local, multilingual, no API key                                          |
 
 **How they were used:**
 ChatGPT was used in the planning phase only — no code was generated there. I described
@@ -192,10 +199,10 @@ The key system prompt and user prompt template are committed in full in `src/llm
 
 See `EVALS.md` for full rubric, 10 test cases, and known failure modes.
 
-| Run | Threshold | Score | Result |
-|-----|-----------|-------|--------|
-| Run 1 | 0.65 | 0.34 | 4/5 — calibration failed |
-| Run 2 | 0.30 | 0.74 | **5/5 ✓** |
+| Run   | Threshold | Score | Result                   |
+| ----- | --------- | ----- | ------------------------ |
+| Run 1 | 0.65      | 0.34  | 4/5 — calibration failed |
+| Run 2 | 0.30      | 0.74  | **5/5 ✓**                |
 
 ---
 
@@ -217,13 +224,13 @@ BGE-M3 via Ollama for embeddings. The similarity threshold bug was caught by eva
 
 ## Time log
 
-| Phase | Time |
-|---|---|
-| Problem selection + brief reading | ~20 min |
-| Architecture planning (ChatGPT) | ~30 min |
-| Schema + prompt design | ~45 min |
-| Pipeline code + review | ~90 min |
-| Debugging (threshold calibration) | ~30 min |
-| Eval suite + test cases | ~40 min |
-| Documentation | ~45 min |
-| **Total** | **~5 hours** |
+| Phase                             | Time         |
+| --------------------------------- | ------------ |
+| Problem selection + brief reading | ~20 min      |
+| Architecture planning (ChatGPT)   | ~30 min      |
+| Schema + prompt design            | ~45 min      |
+| Pipeline code + review            | ~90 min      |
+| Debugging (threshold calibration) | ~30 min      |
+| Eval suite + test cases           | ~40 min      |
+| Documentation                     | ~45 min      |
+| **Total**                         | **~5 hours** |
