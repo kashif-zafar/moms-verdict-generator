@@ -8,7 +8,7 @@
 
 ---
 
-## One-paragraph summary
+## Summary
 
 Moms Verdict Generator is a RAG pipeline that synthesizes noisy e-commerce reviews
 into a validated, structured JSON verdict. It uses BGE-M3 embeddings (multilingual,
@@ -21,7 +21,7 @@ includes an objective eval suite that caught a real calibration bug during devel
 
 ---
 
-## Setup — clone to first output in under 5 minutes
+## Setup
 
 ### Prerequisites
 
