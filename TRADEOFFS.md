@@ -150,6 +150,11 @@ the difference is negligible — the soft cap is a crude approximation.
    suite would have 20+, including injected fake reviews, copy-pasted review spam,
    and reviews in languages outside EN/AR.
 
+6. **Context window management** — At 20 reviews with top-k=10, the full prompt
+   sits around ~1,000 tokens — well within Qwen's 128k limit. At scale (10,000+
+   reviews), a map-reduce pattern would be needed: summarise each retrieved chunk
+   before passing to the LLM, or batch reviews into groups and merge verdicts.
+   Not built here because it would be over-engineering for the stated dataset size.
 ---
 
 ## Time log
