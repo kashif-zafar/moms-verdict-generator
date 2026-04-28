@@ -145,8 +145,8 @@ def call_llm(
         response_json = response.json()
 
     except requests.exceptions.HTTPError as e:
-        # If primary model fails (quota, unavailable), retry with fallback
-        if response.status_code in (429, 503) and model != FALLBACK_MODEL:
+        status = getattr(response, 'status_code', None)
+        if status in (429, 503) and model != FALLBACK_MODEL:
             print(f"[llm] Primary model unavailable. Retrying with {FALLBACK_MODEL}...")
             return call_llm(
                 product_name, retrieved_chunks, total_reviews,
@@ -209,10 +209,9 @@ def call_llm(
 
     # Strip accidental markdown fences if LLM adds them
     if raw_content.startswith("```"):
-        raw_content = raw_content.split("```")[1]
-        if raw_content.startswith("json"):
-            raw_content = raw_content[4:]
-        raw_content = raw_content.strip()
+        lines = raw_content.splitlines()
+        # Remove first line (```json) and last line (```)
+        raw_content = "\n".join(lines[1:-1]).strip()
 
     try:
         result = json.loads(raw_content)
