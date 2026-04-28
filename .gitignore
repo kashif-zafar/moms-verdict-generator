@@ -1,5 +1,8 @@
 # generated output
-outputs/
+outputs/*.json
+outputs/faiss.index
+outputs/chunks.pkl
+!outputs/.gitkeep
 
 # local secrets
 .env
