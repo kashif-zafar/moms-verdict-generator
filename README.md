@@ -1,10 +1,8 @@
-# Moms Verdict Generator
-
-
+# Multilingual Review Verdict Pipeline
 
 ## Summary
 
-Moms Verdict Generator is a RAG pipeline that synthesizes noisy e-commerce reviews
+Multilingual Review Verdict Pipeline is a RAG pipeline that synthesizes noisy e-commerce reviews
 into a validated, structured JSON verdict. It uses BGE-M3 embeddings (multilingual,
 local via Ollama) to retrieve the most relevant review chunks into a FAISS index,
 computes a three-signal confidence score from retrieval quality, sentiment consistency,
@@ -140,7 +138,7 @@ The system expresses uncertainty explicitly — it does not hide it:
 ## Project structure
 
 ```
-moms_verdict/
+multilingual-review-verdict-pipeline/
 ├── main.py               ← pipeline orchestrator (run this)
 ├── eval.py               ← objective evaluation suite
 ├── requirements.txt
@@ -215,4 +213,3 @@ See `TRADEOFFS.md` for full architecture decisions and what was cut.
 ChatGPT (GPT-4o) for architecture planning. Claude (Sonnet) as primary coding assistant
 for all modules and documentation. Qwen 2.5 72B via OpenRouter as the runtime LLM.
 BGE-M3 via Ollama for embeddings. The similarity threshold bug was caught by evals.
-
