@@ -1,12 +1,6 @@
 # Moms Verdict Generator
 
-### Track A — AI Engineering Intern | Mumzworld Take-Home
 
-> Takes 100–200 messy product reviews (English + Arabic) and converts them into
-> a clean, structured verdict: pros, cons, common complaints, best use cases,
-> and a confidence score — grounded entirely in the input reviews.
-
----
 
 ## Summary
 
@@ -222,15 +216,3 @@ ChatGPT (GPT-4o) for architecture planning. Claude (Sonnet) as primary coding as
 for all modules and documentation. Qwen 2.5 72B via OpenRouter as the runtime LLM.
 BGE-M3 via Ollama for embeddings. The similarity threshold bug was caught by evals.
 
-## Time log
-
-| Phase                             | Time         |
-| --------------------------------- | ------------ |
-| Problem selection + brief reading | ~20 min      |
-| Architecture planning (ChatGPT)   | ~30 min      |
-| Schema + prompt design            | ~45 min      |
-| Pipeline code + review            | ~90 min      |
-| Debugging (threshold calibration) | ~30 min      |
-| Eval suite + test cases           | ~40 min      |
-| Documentation                     | ~45 min      |
-| **Total**                         | **~5 hours** |
